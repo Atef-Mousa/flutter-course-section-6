@@ -24,14 +24,13 @@ This repository has the code from the section and a summary of every main concep
 - [Concepts summary](#concepts-summary)
   - [1. Local storage](#1-local-storage)
   - [2. Client and server](#2-client-and-server)
-  - [3. REST API rules](#3-rest-api-rules)
-  - [4. HTTP methods](#4-http-methods)
-  - [5. Query parameters](#5-query-parameters)
-  - [6. JSON and Map](#6-json-and-mapstring-dynamic)
-  - [7. Status codes](#7-status-codes)
-  - [8. Exceptions and error types](#8-exceptions-and-error-types)
-  - [9. Models and services](#9-models-and-services)
+  - [3. HTTP methods](#3-http-methods)
+  - [4. Query parameters](#4-query-parameters)
+  - [5. JSON and Map](#5-json-and-mapstring-dynamic)
+  - [6. Status codes](#6-status-codes)
+  - [7. Exceptions and error types](#7-exceptions-and-error-types)
 - [Dio cheat sheet](#dio-cheat-sheet)
+- [What's next](#whats-next)
 - [How to run the projects](#how-to-run-the-projects)
 - [Check yourself](#check-yourself)
 - [Resources](#resources)
@@ -42,29 +41,29 @@ This repository has the code from the section and a summary of every main concep
 
 ```text
 flutter-course-section-6/
-├── full_shopping_app_2/     shared_preferences: save and read data on the device
-├── social_media_4/          Dio demo: GET, POST, PUT, PATCH, DELETE and errors
-├── wheather_app_1/          Real API: live weather with a model and a service
+├── full_shopping_app/     shared_preferences: save and read data on the device
+├── social_media/          Dio demo: GET, POST, PUT, PATCH, DELETE and errors
+├── weather_app/          Real API: get live weather data
 ├── networking_notes.pdf     Reference: Dio errors, status codes, client-server communication
 └── README.md                You are here
 ```
 
 | Project | Main idea | API used | Read more |
 | --- | --- | --- | --- |
-| `full_shopping_app_2` | Saving data so it survives an app restart | None (local storage) | [README](full_shopping_app_2/README.md) |
-| `social_media_4` | How requests, responses and errors work | [DummyJSON](https://dummyjson.com) (practice API) | [README](social_media_4/README.md) |
-| `wheather_app_1` | Getting real data and organizing the code | [Open-Meteo](https://open-meteo.com) (real API) | [README](wheather_app_1/README.md) |
+| `full_shopping_app` | Saving data so it survives an app restart | None (local storage) | [README](full_shopping_app/README.md) |
+| `social_media` | How requests, responses and errors work | [DummyJSON](https://dummyjson.com) (practice API) | [README](social_media/README.md) |
+| `weather_app` | Getting real data from a real API | [Open-Meteo](https://open-meteo.com) (real API) | [README](weather_app/README.md) |
 
-> `full_shopping_app_2` continues the project from the previous section. Here we only look at what this section added to it: `shared_preferences`.
+> `full_shopping_app` continues the project from the previous section. Here we only look at what this section added to it: `shared_preferences`.
 
 ---
 
 ## How to study this section
 
-1. Read [`full_shopping_app_2`](full_shopping_app_2/README.md) to learn how to save data on the device.
-2. Read [`social_media_4`](social_media_4/README.md), run it, and press every button to see each HTTP method in action.
+1. Read [`full_shopping_app`](full_shopping_app/README.md) to learn how to save data on the device.
+2. Read [`social_media`](social_media/README.md), run it, and press every button to see each HTTP method in action.
 3. Read [`networking_notes.pdf`](networking_notes.pdf) as your reference for status codes and error types.
-4. Read [`wheather_app_1`](wheather_app_1/README.md) to see the same ideas with a real API, then do its exercise.
+4. Read [`weather_app`](weather_app/README.md) to see the same ideas with a real API, then do its exercise.
 
 ---
 
@@ -105,16 +104,7 @@ sequenceDiagram
 
 HTTP is **stateless**: the server does not remember earlier requests, so every request must carry everything the server needs.
 
-### 3. REST API rules
-
-- The **URL is a noun**: it names a thing. Use `/posts`, not `/getPosts`.
-- The **method is the verb**: it says what to do with that thing.
-- `/posts` is the whole list, and `/posts/1` is one item chosen by its id.
-- The **path** chooses the resource, and **query parameters** adjust the result.
-
-Real APIs do not follow every rule. For example, DummyJSON creates a post with `/posts/add`. The API's documentation always has the final word.
-
-### 4. HTTP methods
+### 3. HTTP methods
 
 | Method | What it does | Has a body? | Example | Dio |
 | --- | --- | --- | --- | --- |
@@ -126,7 +116,7 @@ Real APIs do not follow every rule. For example, DummyJSON creates a post with `
 
 **PUT or PATCH?** Think of a form. PUT sends the whole form again. PATCH sends only the fields that changed.
 
-### 5. Query parameters
+### 4. Query parameters
 
 They come after `?` in the URL and are joined with `&`. We use them to filter, sort and page through data.
 
@@ -141,7 +131,7 @@ With Dio, write them as a `Map` and it builds the URL for you:
 await dio.get("/posts", queryParameters: {"limit": 10, "skip": 20});
 ```
 
-### 6. JSON and `Map<String, dynamic>`
+### 5. JSON and `Map<String, dynamic>`
 
 Servers send data as **JSON** text. Dio converts JSON to Dart for you, so `response.data` is ready to use:
 
@@ -161,7 +151,7 @@ final firstTitle = posts[0]["title"];
 
 Keys are always strings, but values can be any type. That is why the type is `Map<String, dynamic>`.
 
-### 7. Status codes
+### 6. Status codes
 
 The first digit tells you the group, and who is responsible.
 
@@ -176,7 +166,7 @@ The first digit tells you the group, and who is responsible.
 
 See [`networking_notes.pdf`](networking_notes.pdf) for the full table.
 
-### 8. Exceptions and error types
+### 7. Exceptions and error types
 
 Networks fail all the time, so every request belongs in a `try` / `catch`. Dio throws a `DioException` when a request fails, **including** when the server replies with 4xx or 5xx. Its `type` tells you why it failed.
 
@@ -202,23 +192,6 @@ try {
 | `unknown` | Any other error |
 
 Show users a clear message such as "No internet connection" instead of a technical error.
-
-### 9. Models and services
-
-In a real app we organize the code so each part has one job:
-
-```mermaid
-flowchart LR
-    UI["UI<br/>shows the data"] -->|asks for data| Service["Service<br/>talks to the API"]
-    Service -->|HTTP request| API[("API")]
-    API -->|JSON| Service
-    Service -->|Map to fromJson| Model["Model<br/>typed Dart object"]
-    Model -->|returns to| UI
-```
-
-- **Model:** a class that describes the data. `fromJson` turns a `Map` into an object, so we write `weather.temperature` instead of `data["current"]["temperature_2m"]`.
-- **Service:** the only class that talks to the internet. The UI never uses Dio directly.
-- **UI:** handles three states that every API screen needs: **loading**, **error** and **success**.
 
 ---
 
@@ -249,13 +222,19 @@ response.data;         // the body, already converted from JSON
 
 ---
 
+## What's next
+
+In real projects we add an extra layer called a **model**. We will build it in the next section.
+
+---
+
 ## How to run the projects
 
 You need Flutter installed with **Dart 3.13.1 or newer**. This code was written with Flutter 3.47.1.
 
 ```bash
 git clone https://github.com/Atef-Mousa/flutter-course-section-6.git
-cd flutter-course-section-6/social_media_4
+cd flutter-course-section-6/social_media
 
 flutter pub get
 flutter run
@@ -276,9 +255,7 @@ You are ready for the next section if you can answer these without looking:
 5. What do 4xx and 5xx tell you about who made the mistake?
 6. What is the difference between `connectionError` and `badResponse`?
 7. Why might `e.response` be `null` inside a `catch`?
-8. What is the job of `fromJson`?
-9. Why should the UI not use Dio directly in a real project?
-10. What are the three states every API screen must handle?
+8. What are the three states every API screen must handle?
 
 ---
 
