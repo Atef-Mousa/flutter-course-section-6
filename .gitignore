@@ -1,0 +1,26 @@
+# Each Flutter project has its own .gitignore for its build files.
+# This file covers the rest of the repository.
+
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Flutter / Dart (safety net for all projects)
+**/build/
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+
+# Local machine paths and secrets
+**/local.properties
+**/key.properties
+**/*.keystore
+**/*.jks
+.env
+*.env
